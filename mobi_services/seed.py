@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from models import User, Balance, Transaction, ActivityLog, Base
 from datetime import datetime
@@ -78,6 +78,7 @@ def seed_data():
 
 # Clearing existing data and seed new data
 seed_data()
+
 
 # Close session
 session.close()
