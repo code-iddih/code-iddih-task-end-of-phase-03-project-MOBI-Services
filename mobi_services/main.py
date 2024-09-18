@@ -71,3 +71,105 @@ def record_transaction(user_id, transaction_type, amount):
     session.add(new_transaction)
     session.commit()
 
+# Fuunction for Main Menu of Interaction
+def main_menu(user, balance):
+    while True:
+        print("\n1. Buy airtime")
+        print("2. Transfer airtime")
+        print("3. Buy Bundles")
+        print("4. Transfer Bundles")
+        print("5. Send Money")
+        print("6. Generate PDF Report")
+        print("7. Logout")
+        choice = input("Choose an option: ")
+
+        if choice == '1':
+            # Buy airtime functionality
+            amount = float(input("Enter amount to buy airtime: "))
+            if balance.mpesa_balance >= amount:
+                balance.airtime_balance += amount
+                balance.mpesa_balance -= amount
+                session.commit()
+                record_transaction(user.id, 'Buy Airtime', amount)
+                print(f"Airtime purchased. New balance: {balance.airtime_balance}")
+            else:
+                print("Insufficient MPesa balance.")
+
+        elif choice == '2':
+            # Transfer airtime functionality
+            amount = float(input("Enter amount to transfer airtime: "))
+            if balance.airtime_balance >= amount:
+                recipient_phone = input("Enter recipient phone number: ")
+                recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
+                if recipient:
+                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
+                    balance.airtime_balance -= amount
+                    recipient_balance.airtime_balance += amount
+                    session.commit()
+                    record_transaction(user.id, 'Transfer Airtime', amount)
+                    print(f"Airtime transferred to {recipient_phone}. New balance: {balance.airtime_balance}")
+                else:
+                    print("Recipient not found.")
+            else:
+                print("Insufficient airtime balance.")
+
+        elif choice == '3':
+            # Buy bundles functionality
+            amount = float(input("Enter amount to buy bundles: "))
+            if balance.mpesa_balance >= amount:
+                balance.bundles_balance = f"{int(balance.bundles_balance[:-2]) + int(amount)}MB"
+                balance.mpesa_balance -= amount
+                session.commit()
+                record_transaction(user.id, 'Buy Bundles', amount)
+                print(f"Bundles purchased. New balance: {balance.bundles_balance}")
+            else:
+                print("Insufficient MPesa balance.")
+
+        elif choice == '4':
+            # Transfer bundles functionality
+            amount = float(input("Enter amount to transfer bundles: "))
+            if int(balance.bundles_balance[:-2]) >= amount:
+                recipient_phone = input("Enter recipient phone number: ")
+                recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
+                if recipient:
+                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
+                    balance.bundles_balance = f"{int(balance.bundles_balance[:-2]) - int(amount)}MB"
+                    recipient_balance.bundles_balance = f"{int(recipient_balance.bundles_balance[:-2]) + int(amount)}MB"
+                    session.commit()
+                    record_transaction(user.id, 'Transfer Bundles', amount)
+                    print(f"Bundles transferred to {recipient_phone}. New balance: {balance.bundles_balance}")
+                else:
+                    print("Recipient not found.")
+            else:
+                print("Insufficient bundles balance.")
+
+        elif choice == '5':
+            # Send money functionality
+            amount = float(input("Enter amount to send: "))
+            if balance.mpesa_balance >= amount:
+                recipient_phone = input("Enter recipient phone number: ")
+                recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
+                if recipient:
+                    balance.mpesa_balance -= amount
+                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
+                    recipient_balance.mpesa_balance += amount
+                    session.commit()
+                    record_transaction(user.id, 'Send Money', amount)
+                    print(f"Money sent to {recipient_phone}. New MPesa balance: {balance.mpesa_balance}")
+                else:
+                    print("Recipient not found.")
+            else:
+                print("Insufficient MPesa balance.")
+
+        elif choice == '6':
+            # Generate a PDF report of transactions
+            generate_pdf_report(user.id)
+
+        elif choice == '7':
+            # Logout functionality
+            print("Logging out...")
+            break
+
+        else:
+            print("Invalid option. Please try again.")
+
