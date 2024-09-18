@@ -46,3 +46,7 @@ def login():
     else:
         print("Phone number not found.")
         return None, None
+    
+# Function to Generate Random Numbers for new Users
+def generate_phone_number():
+    return '07' + ''.join([str(random.randint(0, 9)) for _ in range(8)])
