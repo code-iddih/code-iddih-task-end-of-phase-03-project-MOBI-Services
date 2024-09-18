@@ -57,6 +57,7 @@ def login():
         print("Phone number not found.")
         return None, None
     
+    
 # Function to Generate Random Numbers for new Users
 def generate_phone_number():
     return '07' + ''.join([str(random.randint(0, 9)) for _ in range(8)])
@@ -106,6 +107,7 @@ def main_menu(user, balance):
         print("5. Send Money")
         print("6. Generate PDF Report")
         print("7. Logout")
+        print("8. Back Home")
         choice = input("Choose an option: ")
 
         if choice == '1':
@@ -141,14 +143,32 @@ def main_menu(user, balance):
         elif choice == '3':
             # Buy bundles functionality
             amount = float(input("Enter amount to buy bundles: "))
-            if balance.mpesa_balance >= amount:
-                balance.bundles_balance = f"{int(balance.bundles_balance[:-2]) + int(amount)}MB"
-                balance.mpesa_balance -= amount
-                session.commit()
-                record_transaction(user.id, 'Buy Bundles', amount)
-                print(f"Bundles purchased. New balance: {balance.bundles_balance}")
+            payment_method = input("Choose payment method:\n1. MPesa\n2. Credit\nEnter 1 for MPesa or 2 for Credit: ")
+            if payment_method == '1':
+                if balance.mpesa_balance >= amount:
+                    # Extracting  numeric part from bundles_balance
+                    current_bundles = float(balance.bundles_balance.replace("MB", ""))
+                    balance.bundles_balance = f"{int(current_bundles + amount)}MB"
+                    balance.mpesa_balance -= amount
+                    session.commit()
+                    record_transaction(user.id, 'Buy Bundles', amount)
+                    print(f"Bundles purchased with MPesa. New balance: {balance.bundles_balance}")
+                else:
+                    print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
+            elif payment_method == '2':
+                if balance.airtime_balance >= amount:
+                    # Extractinng numeric part from bundles_balance
+                    current_bundles = float(balance.bundles_balance.replace("MB", ""))
+                    balance.bundles_balance = f"{int(current_bundles + amount)}MB"
+                    balance.airtime_balance -= amount
+                    session.commit()
+                    record_transaction(user.id, 'Buy Bundles', amount)
+                    print(f"Bundles purchased with Credit. New balance: {balance.bundles_balance}")
+                else:
+                    print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
             else:
-                print("Insufficient MPesa balance.")
+                print("Invalid payment method selected.")
+
 
         elif choice == '4':
             # Transfer bundles functionality
@@ -194,6 +214,9 @@ def main_menu(user, balance):
             # Logout functionality
             print("Logging out...")
             break
+
+        elif choice == '8':
+            
 
         else:
             print("Invalid option. Please try again.")
