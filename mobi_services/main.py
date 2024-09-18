@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import random
 from fpdf import FPDF
 from sqlalchemy.orm import sessionmaker
@@ -63,15 +65,30 @@ def generate_phone_number():
 def register():
     name = input("Enter your name: ")
     phone_number = generate_phone_number()
+    
+    # Creating a new user
     new_user = User(phone_number=phone_number, username=name)
     session.add(new_user)
     session.commit()
-    new_balance = Balance(user_id=new_user.id, airtime_balance=0, bundles_balance="0MB", mpesa_balance=0)
+    
+    # Awarding 50MB and 50 credit upon registration
+    new_balance = Balance(user_id=new_user.id, airtime_balance=50, bundles_balance="50MB", mpesa_balance=0)
     session.add(new_balance)
     session.commit()
-    print(f"You have successfully earned a new line {phone_number}")
+
+    # Displaying success message and balances vertically
+    print(f"Welcome {new_user.username}! You have successfully earned a new line {phone_number}")
+    print("You have been awarded free 50MB and 50 credit!")
+    print("Your new balances are:")
+    print(f"Airtime Balance: {new_balance.airtime_balance}")
+    print(f"Bundles Balance: {new_balance.bundles_balance}")
+    print(f"MPesa Balance: {new_balance.mpesa_balance}")
+    
+    # Logging the registration activity
     log_activity(new_user.id, "Register")
+    
     return new_user, new_balance
+
 
 # Function to Reord Transactions
 def record_transaction(user_id, transaction_type, amount):
