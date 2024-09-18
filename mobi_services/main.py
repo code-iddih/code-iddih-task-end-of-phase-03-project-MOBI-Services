@@ -58,9 +58,19 @@ def display_home(user, balance):
     print("7. Logout")
     print("8. Back Home")
 
+# Validate user Name
+def is_valid_username(username):
+    # Checks if the username is not empty and contains only alphabetic characters
+    return bool(username) and username.isalpha()
+
 # Function to register a new user
 def register():
-    name = input("Enter your name: ")
+    while True:
+        name = input("Enter your name: ")
+        if is_valid_username(name):
+            break
+        else:
+            print("Invalid name. Please enter a name that contains only alphabetic characters and is not empty.")         
     phone_number = generate_phone_number()
     
     # Creating a new user
