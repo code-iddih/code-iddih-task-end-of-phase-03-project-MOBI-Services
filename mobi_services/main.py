@@ -173,3 +173,20 @@ def main_menu(user, balance):
         else:
             print("Invalid option. Please try again.")
 
+# Function to handle registration , login
+def main():
+    welcome_message()
+    choice = input("Enter 1 to Login or 2 to Register: ")
+    if choice == '1':
+        user, balance = login()
+        if balance:
+            main_menu(user, balance)
+    elif choice == '2':
+        user, balance = register()
+        if balance:
+            main_menu(user, balance)
+    else:
+        print("Invalid choice.")
+
+if __name__ == "__main__":
+    main()
