@@ -35,6 +35,9 @@ class Transaction(Base):
     type = Column(String, nullable=False)
     amount = Column(Float, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
+    method = Column(String, nullable=True)  
+    sender = Column(String, nullable=True)  
+    receiver = Column(String, nullable=True) 
     user = relationship("User", back_populates="transactions")
 
 class ActivityLog(Base):

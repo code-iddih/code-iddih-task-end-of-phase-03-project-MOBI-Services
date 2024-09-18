@@ -21,22 +21,6 @@ def log_activity(user_id, action):
     session.add(new_activity)
     session.commit()
 
-# Generating a PDF report of a user's transactions
-def generate_pdf_report(user_id):
-    transactions = session.query(Transaction).filter_by(user_id=user_id).all()
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt="Transaction Report", ln=True, align='C')
-
-    pdf.ln(10) 
-    for txn in transactions:
-        pdf.cell(200, 10, txt=f"{txn.timestamp}: {txn.type} - {txn.amount}", ln=True)
-
-    pdf_file_name = f"transaction_report_{user_id}.pdf"
-    pdf.output(pdf_file_name)
-    print(f"PDF report generated Successfully... : {pdf_file_name}") 
-
 # Function to verify user login
 def login():
     phone_number = input("Enter your phone number: ")
@@ -102,10 +86,65 @@ def register():
     return new_user, new_balance
 
 # Function to record transactions
-def record_transaction(user_id, transaction_type, amount):
-    new_transaction = Transaction(user_id=user_id, type=transaction_type, amount=amount)
+def record_transaction(user_id, transaction_type, amount, method=None, sender=None, receiver=None):
+    new_transaction = Transaction(
+        user_id=user_id,
+        type=transaction_type,
+        amount=amount,
+        method=method,
+        sender=sender,
+        receiver=receiver
+    )
     session.add(new_transaction)
     session.commit()
+
+# Generating a PDF report of a user's transactions
+def generate_pdf_report(user_id):
+    user = session.query(User).filter_by(id=user_id).first()
+    transactions = session.query(Transaction).filter_by(user_id=user_id).all()
+
+    if not user:
+        print("User not found.")
+        return
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    # Adding User Name
+    pdf.cell(200, 10, txt=f"Name of the user: {user.username}", ln=True, align='L')
+
+    # Adding Table Header
+    pdf.ln(10)
+    pdf.set_font("Arial", size=10)
+    pdf.cell(30, 10, "Date", 1)
+    pdf.cell(40, 10, "Type", 1)
+    pdf.cell(50, 10, "Method", 1)
+    pdf.cell(30, 10, "Sender", 1)
+    pdf.cell(30, 10, "Receiver", 1)
+    pdf.cell(40, 10, "Amount", 1, ln=True)
+
+    # Adding Transaction Data
+    pdf.set_font("Arial", size=9)
+    for txn in transactions:
+        txn_date = txn.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        txn_type = txn.type
+        txn_method = txn.method if txn.method else 'N/A'
+        txn_sender = txn.sender if txn.sender else 'N/A'
+        txn_receiver = txn.receiver if txn.receiver else 'N/A'
+        txn_amount = f"{txn.amount:.2f}"
+
+        pdf.cell(30, 10, txn_date, 1)
+        pdf.cell(40, 10, txn_type, 1)
+        pdf.cell(50, 10, txn_method, 1)
+        pdf.cell(30, 10, txn_sender, 1)
+        pdf.cell(30, 10, txn_receiver, 1)
+        pdf.cell(40, 10, txn_amount, 1, ln=True)
+
+    pdf_file_name = f"transaction_report_{user_id}.pdf"
+    pdf.output(pdf_file_name)
+    print(f"PDF report generated successfully: {pdf_file_name}")
+
 
 # Function for main menu interaction
 def main_menu(user, balance):
