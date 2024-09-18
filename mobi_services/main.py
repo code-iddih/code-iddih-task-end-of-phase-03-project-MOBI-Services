@@ -40,9 +40,17 @@ def login():
     user = session.query(User).filter_by(phone_number=phone_number).first()
     if user:
         balance = session.query(Balance).filter_by(user_id=user.id).first()
-        print(f"Welcome {user.username}!")
-        log_activity(user.id, "Login")
-        return user, balance
+        if balance:
+            print(f"Welcome {user.username}!")
+            print(f"Your current balances are:")
+            print(f"Airtime Balance: {balance.airtime_balance}")
+            print(f"Bundles Balance: {balance.bundles_balance}")
+            print(f"MPesa Balance: {balance.mpesa_balance}")
+            log_activity(user.id, "Login")
+            return user, balance
+        else:
+            print("No balance found for this user.")
+            return None, None
     else:
         print("Phone number not found.")
         return None, None
