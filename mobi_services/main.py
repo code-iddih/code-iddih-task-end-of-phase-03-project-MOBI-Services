@@ -10,7 +10,7 @@ engine = create_engine('sqlite:///mobi_services.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Printing a wlecoming message
+# Printing a welcoming message
 def welcome_message():
     print("\nWelcome to MOBILE SERVICES\n")
 
@@ -43,11 +43,7 @@ def login():
     if user:
         balance = session.query(Balance).filter_by(user_id=user.id).first()
         if balance:
-            print(f"Welcome {user.username}!")
-            print(f"Your current balances are:")
-            print(f"Airtime Balance: {balance.airtime_balance}")
-            print(f"Bundles Balance: {balance.bundles_balance}")
-            print(f"MPesa Balance: {balance.mpesa_balance}")
+            display_home(user, balance)  # Display balances upon login
             log_activity(user.id, "Login")
             return user, balance
         else:
@@ -56,13 +52,28 @@ def login():
     else:
         print("Phone number not found.")
         return None, None
-    
-    
-# Function to Generate Random Numbers for new Users
+
+# Function to generate random numbers for new users
 def generate_phone_number():
     return '07' + ''.join([str(random.randint(0, 9)) for _ in range(8)])
 
-# Function to regisster new user
+# Function to display user balances
+def display_home(user, balance):
+    print(f"\nWelcome {user.username}!")
+    print("\nYour current balances are:")
+    print(f"Airtime Balance: {balance.airtime_balance}")
+    print(f"Bundles Balance: {balance.bundles_balance}")
+    print(f"MPesa Balance: {balance.mpesa_balance}\n")
+    print("\n1. Buy airtime")
+    print("2. Transfer airtime")
+    print("3. Buy Bundles")
+    print("4. Transfer Bundles")
+    print("5. Send Money")
+    print("6. Generate PDF Report")
+    print("7. Logout")
+    print("8. Back Home")
+
+# Function to register a new user
 def register():
     name = input("Enter your name: ")
     phone_number = generate_phone_number()
@@ -78,36 +89,26 @@ def register():
     session.commit()
 
     # Displaying success message and balances vertically
-    print(f"Welcome {new_user.username}! You have successfully earned a new line {phone_number}")
-    print("You have been awarded free 50MB and 50 credit!")
-    print("Your new balances are:")
-    print(f"Airtime Balance: {new_balance.airtime_balance}")
-    print(f"Bundles Balance: {new_balance.bundles_balance}")
-    print(f"MPesa Balance: {new_balance.mpesa_balance}")
+    print(f"\nYou have successfully earned a new line {phone_number}")
+    print("You have also been awarded free 50MB and 50 credit!")
     
     # Logging the registration activity
     log_activity(new_user.id, "Register")
+
+    display_home(new_user, new_balance)
+    main_menu(new_user, new_balance)
     
     return new_user, new_balance
 
-
-# Function to Reord Transactions
+# Function to record transactions
 def record_transaction(user_id, transaction_type, amount):
     new_transaction = Transaction(user_id=user_id, type=transaction_type, amount=amount)
     session.add(new_transaction)
     session.commit()
 
-# Fuunction for Main Menu of Interaction
+# Function for main menu interaction
 def main_menu(user, balance):
     while True:
-        print("\n1. Buy airtime")
-        print("2. Transfer airtime")
-        print("3. Buy Bundles")
-        print("4. Transfer Bundles")
-        print("5. Send Money")
-        print("6. Generate PDF Report")
-        print("7. Logout")
-        print("8. Back Home")
         choice = input("Choose an option: ")
 
         if choice == '1':
@@ -120,7 +121,7 @@ def main_menu(user, balance):
                 record_transaction(user.id, 'Buy Airtime', amount)
                 print(f"Airtime purchased. New balance: {balance.airtime_balance}")
             else:
-                print("Insufficient MPesa balance.")
+                print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
 
         elif choice == '2':
             # Transfer airtime functionality
@@ -138,7 +139,7 @@ def main_menu(user, balance):
                 else:
                     print("Recipient not found.")
             else:
-                print("Insufficient airtime balance.")
+                print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
 
         elif choice == '3':
             # Buy bundles functionality
@@ -146,7 +147,6 @@ def main_menu(user, balance):
             payment_method = input("Choose payment method:\n1. MPesa\n2. Credit\nEnter 1 for MPesa or 2 for Credit: ")
             if payment_method == '1':
                 if balance.mpesa_balance >= amount:
-                    # Extracting  numeric part from bundles_balance
                     current_bundles = float(balance.bundles_balance.replace("MB", ""))
                     balance.bundles_balance = f"{int(current_bundles + amount)}MB"
                     balance.mpesa_balance -= amount
@@ -157,7 +157,6 @@ def main_menu(user, balance):
                     print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
             elif payment_method == '2':
                 if balance.airtime_balance >= amount:
-                    # Extractinng numeric part from bundles_balance
                     current_bundles = float(balance.bundles_balance.replace("MB", ""))
                     balance.bundles_balance = f"{int(current_bundles + amount)}MB"
                     balance.airtime_balance -= amount
@@ -168,7 +167,6 @@ def main_menu(user, balance):
                     print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
             else:
                 print("Invalid payment method selected.")
-
 
         elif choice == '4':
             # Transfer bundles functionality
@@ -204,7 +202,7 @@ def main_menu(user, balance):
                 else:
                     print("Recipient not found.")
             else:
-                print("Insufficient MPesa balance.")
+                print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
 
         elif choice == '6':
             # Generate a PDF report of transactions
@@ -216,25 +214,27 @@ def main_menu(user, balance):
             break
 
         elif choice == '8':
-            
+            display_home(user, balance)  # Show the home screen view
+            continue  # Continue the loop to allow further options
 
         else:
             print("Invalid option. Please try again.")
 
-# Function to handle registration , login
+# Function to handle registration and login
 def main():
     welcome_message()
-    choice = input("Enter 1 to Login or 2 to Register: ")
+    choice = input("1. Register\n2. Login\nChoose an option: ")
+
     if choice == '1':
-        user, balance = login()
-        if balance:
+        user, balance = register()
+        if user and balance:
             main_menu(user, balance)
     elif choice == '2':
-        user, balance = register()
-        if balance:
+        user, balance = login()
+        if user and balance:
             main_menu(user, balance)
     else:
-        print("Invalid choice.")
+        print("Invalid option selected.")
 
 if __name__ == "__main__":
     main()
