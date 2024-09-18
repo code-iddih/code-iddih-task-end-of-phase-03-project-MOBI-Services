@@ -64,3 +64,10 @@ def register():
     print(f"You have successfully earned a new line {phone_number}")
     log_activity(new_user.id, "Register")
     return new_user, new_balance
+
+# Function to Reord Transactions
+def record_transaction(user_id, transaction_type, amount):
+    new_transaction = Transaction(user_id=user_id, type=transaction_type, amount=amount)
+    session.add(new_transaction)
+    session.commit()
+
