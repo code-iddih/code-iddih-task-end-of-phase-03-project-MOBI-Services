@@ -50,3 +50,17 @@ def login():
 # Function to Generate Random Numbers for new Users
 def generate_phone_number():
     return '07' + ''.join([str(random.randint(0, 9)) for _ in range(8)])
+
+# Function to regisster new user
+def register():
+    name = input("Enter your name: ")
+    phone_number = generate_phone_number()
+    new_user = User(phone_number=phone_number, username=name)
+    session.add(new_user)
+    session.commit()
+    new_balance = Balance(user_id=new_user.id, airtime_balance=0, bundles_balance="0MB", mpesa_balance=0)
+    session.add(new_balance)
+    session.commit()
+    print(f"You have successfully earned a new line {phone_number}")
+    log_activity(new_user.id, "Register")
+    return new_user, new_balance
