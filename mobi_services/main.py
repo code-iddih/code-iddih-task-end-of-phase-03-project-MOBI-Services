@@ -33,3 +33,16 @@ def generate_pdf_report(user_id):
     pdf_file_name = f"transaction_report_{user_id}.pdf"
     pdf.output(pdf_file_name)
     print(f"PDF report generated Successfully... : {pdf_file_name}") 
+
+# Function to verify user login
+def login():
+    phone_number = input("Enter your phone number: ")
+    user = session.query(User).filter_by(phone_number=phone_number).first()
+    if user:
+        balance = session.query(Balance).filter_by(user_id=user.id).first()
+        print(f"Welcome {user.username}!")
+        log_activity(user.id, "Login")
+        return user, balance
+    else:
+        print("Phone number not found.")
+        return None, None
