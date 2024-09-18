@@ -129,10 +129,19 @@ def generate_pdf_report(user_id):
     for txn in transactions:
         txn_date = txn.timestamp.strftime("%Y-%m-%d %H:%M:%S")
         txn_type = txn.type
-        txn_method = txn.method if txn.method else 'N/A'
-        txn_sender = txn.sender if txn.sender else 'N/A'
-        txn_receiver = txn.receiver if txn.receiver else 'N/A'
         txn_amount = f"{txn.amount:.2f}"
+
+        # Determining transaction method based on type and payment method
+        if txn_type in ["Buy Airtime", "Buy Bundles"]:
+            txn_method = txn.method if txn.method else 'N/A'
+        elif txn_type in ["Transfer Airtime", "Transfer Bundles", "Send Money"]:
+            txn_method = txn.method if txn.method else 'N/A'
+        else:
+            txn_method = 'N/A'
+
+        # Setting sender and receiver based on the transaction type
+        txn_sender = txn.sender if txn.sender else user.username  # Set to username if sender is not provided
+        txn_receiver = txn.receiver if txn.receiver else 'N/A'
 
         pdf.cell(30, 10, txn_date, 1)
         pdf.cell(40, 10, txn_type, 1)
@@ -144,6 +153,8 @@ def generate_pdf_report(user_id):
     pdf_file_name = f"transaction_report_{user_id}.pdf"
     pdf.output(pdf_file_name)
     print(f"PDF report generated successfully: {pdf_file_name}")
+
+
 
 
 # Function for main menu interaction
@@ -158,7 +169,7 @@ def main_menu(user, balance):
                 balance.airtime_balance += amount
                 balance.mpesa_balance -= amount
                 session.commit()
-                record_transaction(user.id, 'Buy Airtime', amount)
+                record_transaction(user.id, 'Buy Airtime', amount, method='mpesa', sender=user.phone_number)
                 print(f"Airtime purchased. New balance: {balance.airtime_balance}")
             else:
                 print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
@@ -174,7 +185,7 @@ def main_menu(user, balance):
                     balance.airtime_balance -= amount
                     recipient_balance.airtime_balance += amount
                     session.commit()
-                    record_transaction(user.id, 'Transfer Airtime', amount)
+                    record_transaction(user.id, 'Transfer Airtime', amount, method='airtime', sender=user.phone_number, receiver=recipient_phone)
                     print(f"Airtime transferred to {recipient_phone}. New balance: {balance.airtime_balance}")
                 else:
                     print("Recipient not found.")
@@ -191,7 +202,7 @@ def main_menu(user, balance):
                     balance.bundles_balance = f"{int(current_bundles + amount)}MB"
                     balance.mpesa_balance -= amount
                     session.commit()
-                    record_transaction(user.id, 'Buy Bundles', amount)
+                    record_transaction(user.id, 'Buy Bundles', amount, method='mpesa', sender=user.phone_number)
                     print(f"Bundles purchased with MPesa. New balance: {balance.bundles_balance}")
                 else:
                     print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
@@ -201,7 +212,7 @@ def main_menu(user, balance):
                     balance.bundles_balance = f"{int(current_bundles + amount)}MB"
                     balance.airtime_balance -= amount
                     session.commit()
-                    record_transaction(user.id, 'Buy Bundles', amount)
+                    record_transaction(user.id, 'Buy Bundles', amount, method='airtime', sender=user.phone_number)
                     print(f"Bundles purchased with Credit. New balance: {balance.bundles_balance}")
                 else:
                     print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
@@ -219,7 +230,7 @@ def main_menu(user, balance):
                     balance.bundles_balance = f"{int(balance.bundles_balance[:-2]) - int(amount)}MB"
                     recipient_balance.bundles_balance = f"{int(recipient_balance.bundles_balance[:-2]) + int(amount)}MB"
                     session.commit()
-                    record_transaction(user.id, 'Transfer Bundles', amount)
+                    record_transaction(user.id, 'Transfer Bundles', amount, method='bundles', sender=user.phone_number, receiver=recipient_phone)
                     print(f"Bundles transferred to {recipient_phone}. New balance: {balance.bundles_balance}")
                 else:
                     print("Recipient not found.")
@@ -237,7 +248,7 @@ def main_menu(user, balance):
                     recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
                     recipient_balance.mpesa_balance += amount
                     session.commit()
-                    record_transaction(user.id, 'Send Money', amount)
+                    record_transaction(user.id, 'Send Money', amount, method='mpesa', sender=user.phone_number, receiver=recipient_phone)
                     print(f"Money sent to {recipient_phone}. New MPesa balance: {balance.mpesa_balance}")
                 else:
                     print("Recipient not found.")
