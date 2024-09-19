@@ -217,11 +217,40 @@ def main_menu(user, balance):
                 print("Invalid payment method.")
 
         elif choice == '4':
-            print("Transfer bundles functionality not implemented yet.")
+            amount = float(input("Enter amount to transfer bundles: "))
+            if int(balance.bundles_balance[:-2]) >= amount:
+                recipient_phone = input("Enter recipient phone number: ")
+                recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
+                if recipient:
+                    recipient_username = recipient.username
+                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
+                    balance.bundles_balance = f"{int(balance.bundles_balance[:-2]) - int(amount)}MB"
+                    recipient_balance.bundles_balance = f"{int(recipient_balance.bundles_balance[:-2]) + int(amount)}MB"
+                    session.commit()
+                    record_transaction(user.id, 'Transfer Bundles', amount, method='bundles', sender=user.username, receiver=recipient_username)
+                    print(f"Bundles transferred to {recipient_phone}. New balance: {balance.bundles_balance}")
+                else:
+                    print("Recipient not found.")
+            else:
+                print("Insufficient bundles balance.")
 
         elif choice == '5':
-            print("Send money functionality not implemented yet.")
-
+            amount = float(input("Enter amount to send: "))
+            if balance.mpesa_balance >= amount:
+                recipient_phone = input("Enter recipient phone number: ")
+                recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
+                if recipient:
+                    recipient_username = recipient.username
+                    balance.mpesa_balance -= amount
+                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
+                    recipient_balance.mpesa_balance += amount
+                    session.commit()
+                    record_transaction(user.id, 'Send Money', amount, method='mpesa', sender=user.username, receiver=recipient_username)
+                    print(f"Money sent to {recipient_phone}. New MPesa balance: {balance.mpesa_balance}")
+                else:
+                    print("Recipient not found.")
+            else:
+                print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
         elif choice == '6':
             generate_pdf_report(user.id)
 
