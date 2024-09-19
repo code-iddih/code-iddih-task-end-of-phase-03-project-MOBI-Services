@@ -11,6 +11,38 @@ engine = create_engine('sqlite:///mobi_services.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
+# Menu Option for Admin Users
+admin_menu_options = (
+    ('1', "Buy Airtime"),
+    ('2', "Transfer Airtime"),
+    ('3', "Buy Bundles"),
+    ('4', "Transfer Bundles"),
+    ('5', "Send Money"),
+    ('6', "Generate Transactions PDF"),
+    ('7', "Logout"),
+    ('8', "Back Home"),
+    ('9', "View Activity Logs")  # For Admins only
+)
+
+# Menu Option for Regular Users
+user_menu_options = (
+    ('1', "Buy Airtime"),
+    ('2', "Transfer Airtime"),
+    ('3', "Buy Bundles"),
+    ('4', "Transfer Bundles"),
+    ('5', "Send Money"),
+    ('6', "Generate Transactions PDF"),
+    ('7', "Logout"),
+    ('8', "Back Home"),
+)
+
+# Main Menu Option
+main_menu_options = (
+    ('1', "Login"),
+    ('2', "Register"),
+    ('3', "Exit")
+)
+
 # Printing a welcoming message
 def welcome_message():
     print(f"\n{YELLOW}{BOLD}Welcome to MOBILE SERVICES!{RESET}{RESET}\n")
@@ -31,7 +63,7 @@ def login():
             display_home(user, balance)
             log_activity(user.id, "logged in")
             return user, balance
-    print("{RED}Phone number not found or no balance found.{RESET}")
+    print(f"{RED}Phone number not found or no balance found.{RESET}")
     return None, None
 
 # Function to generate random numbers for new users
@@ -46,19 +78,7 @@ def display_home(user, balance):
     print(f"Airtime Balance: {BLUE}{balance.airtime_balance}{RESET}")
     print(f"Bundles Balance: {BLUE}{balance.bundles_balance}{RESET}")
     print(f"MPesa Balance: {BLUE}{balance.mpesa_balance}{RESET}")
-    print("-------------------------\n")
-    print(f"1. {BOLD}Buy airtime{RESET}")
-    print(f"2. {BOLD}Transfer airtime{RESET}")
-    print(f"3. {BOLD}Buy Bundles{RESET}")
-    print(f"4. {BOLD}Transfer Bundles{RESET}")
-    print(f"5. {BOLD}Send Money{RESET}")
-    print(f"6. {BOLD}Generate Transactions Report{RESET}")
-    print(f"7. {BOLD}Logout{RESET}")
-    print(f"8. {BOLD}Back Home{RESET}")
-
-    
-    if user.phone_number == "0756668183":  # Checking if the User is an Admin
-        print(f"9. {BOLD}View Activity Logs{RESET}")
+    print("-------------------------")
 
 # Validate user Name
 def is_valid_username(username):
@@ -161,14 +181,24 @@ def view_activity_logs():
         if user:
             timestamp_str = activity.timestamp.strftime('%I:%M %p on %Y-%m-%d')
             print(f"User {user.username} {activity.action} at {timestamp_str}")
-        else:
-            continue
 
 # Function for main menu interaction
 def main_menu(user, balance):
     while True:
-        choice = input("\nChoose an option: ")
+        # Determine which menu options to display
+        if user.phone_number == "0756668183":  # Check if the user is admin
+            menu = admin_menu_options
+        else:
+            menu = user_menu_options
 
+        # Display menu options
+        print("\nChoose Option :")
+        # Iterating the List
+        for option in menu:
+            print(f"{option[0]}. {BOLD}{option[1]}{RESET}")
+        
+        choice = input("\nChoose Option: ")
+        
         # Buy Airtime
         if choice == '1':
             amount = float(input("Enter amount to buy airtime: "))
@@ -204,50 +234,56 @@ def main_menu(user, balance):
 
         # Buy Bundles
         elif choice == '3':
-            amount = float(input("Enter amount to buy bundles: "))
+            amount = int(input("Enter amount of bundles to buy: "))
             payment_method = input("Choose payment method:\n1. MPesa\n2. Credit\nEnter 1 for MPesa or 2 for Credit: ")
+            # Buying Bundles Using Mpesa
             if payment_method == '1':
                 if balance.mpesa_balance >= amount:
-                    current_bundles = float(balance.bundles_balance.replace("MB", ""))
-                    balance.bundles_balance = f"{int(current_bundles + amount)}MB"
+                    current_bundles = balance.bundles_balance
+                    new_bundles = f"{int(current_bundles.split('MB')[0]) + int(amount)}MB"
+                    balance.bundles_balance = new_bundles
                     balance.mpesa_balance -= amount
                     session.commit()
-                    record_transaction(user.id, 'Buy Bundles', amount, method='mpesa', sender=user.username)
-                    log_activity(user.id, f"purchased {amount}MB of bundles using MPesa")
+                    record_transaction(user.id, 'Buy Bundles', amount, method='MPesa')
+                    log_activity(user.id, f"bought {amount}MB of bundles using MPesa")
                     print(f"Bundles purchased. New bundles balance: {BLUE}{balance.bundles_balance}{RESET}")
                 else:
-                    print(f"Insufficient MPesa balance. Your current balance is {BLUE}{balance.mpesa_balance}{RESET}")
+                    print(f"{RED}Insufficient MPesa balance. Your current balance is {BLUE}{balance.mpesa_balance}{RESET}")
+
+            # Buying Bundles Using Airtime
             elif payment_method == '2':
                 if balance.airtime_balance >= amount:
-                    current_bundles = float(balance.bundles_balance.replace("MB", ""))
-                    balance.bundles_balance = f"{int(current_bundles + amount)}MB"
+                    current_bundles = balance.bundles_balance
+                    new_bundles = f"{int(current_bundles.split('MB')[0]) + int(amount)}MB"
+                    balance.bundles_balance = new_bundles
                     balance.airtime_balance -= amount
                     session.commit()
-                    record_transaction(user.id, 'Buy Bundles', amount, method='airtime', sender=user.username)
-                    print(f"Bundles purchased with Credit. New balance: {BLUE}{balance.bundles_balance}{RESET}")
+                    record_transaction(user.id, 'Buy Bundles', amount, method='Credit')
+                    log_activity(user.id, f"bought {amount}MB of bundles using Credit")
+                    print(f"Bundles purchased. New bundles balance: {BLUE}{balance.bundles_balance}{RESET}")
                 else:
-                    print(f"Insufficient airtime balance. Your current balance is {BLUE}{balance.airtime_balance}{RESET}")
-            else:
-                print(f"{RED}Invalid payment method.{RESET}")
-
+                    print(f"{RED}Insufficient airtime balance. Your current balance is {BLUE}{balance.airtime_balance}{RESET}")
+        
         # Transfer Bundles
         elif choice == '4':
-            amount = float(input("Enter amount to transfer bundles: "))
-            if int(balance.bundles_balance[:-2]) >= amount:
+            amount = int(input("Enter amount of bundles to transfer: "))
+            if int(balance.bundles_balance.split('MB')[0]) >= amount:
                 recipient_phone = input("Enter recipient phone number: ")
                 recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
                 if recipient:
-                    recipient_username = recipient.username
                     recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
-                    balance.bundles_balance = f"{int(balance.bundles_balance[:-2]) - int(amount)}MB"
-                    recipient_balance.bundles_balance = f"{int(recipient_balance.bundles_balance[:-2]) + int(amount)}MB"
+                    current_bundles = int(balance.bundles_balance.split('MB')[0])
+                    new_bundles = f"{current_bundles - amount}MB"
+                    balance.bundles_balance = new_bundles
+                    recipient_balance.bundles_balance = f"{int(recipient_balance.bundles_balance.split('MB')[0]) + amount}MB"
                     session.commit()
-                    record_transaction(user.id, 'Transfer Bundles', amount, method='bundles', sender=user.username, receiver=recipient_username)
-                    print(f"Bundles transferred to {recipient_phone}. New balance: {BLUE}{balance.bundles_balance}{RESET}")
+                    record_transaction(user.id, 'Transfer Bundles', amount, method='bundles', sender=user.username, receiver=recipient.username)
+                    log_activity(user.id, f"transferred {amount}MB of bundles to {recipient_phone}")
+                    print(f"Bundles transferred to {recipient_phone}. Your new bundles balance: {BLUE}{balance.bundles_balance}{RESET}")
                 else:
                     print(f"{RED}Recipient not found.{RESET}")
             else:
-                print(f"{RED}Insufficient bundles balance.{RESET}")
+                print(f"Insufficient bundles balance. Your current balance is {BLUE}{balance.bundles_balance}{RESET}")
 
         # Send Money
         elif choice == '5':
@@ -256,56 +292,64 @@ def main_menu(user, balance):
                 recipient_phone = input("Enter recipient phone number: ")
                 recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
                 if recipient:
-                    recipient_username = recipient.username
                     balance.mpesa_balance -= amount
-                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
-                    recipient_balance.mpesa_balance += amount
                     session.commit()
-                    record_transaction(user.id, 'Send Money', amount, method='mpesa', sender=user.username, receiver=recipient_username)
-                    print(f"Money sent to {recipient_phone}. New MPesa balance: {BLUE}{balance.mpesa_balance}{RESET}")
+                    record_transaction(user.id, 'Send Money', amount, method='MPesa', sender=user.username, receiver=recipient.username)
+                    log_activity(user.id, f"sent {amount} to {recipient_phone}")
+                    print(f"Money sent to {recipient_phone}. Your new MPesa balance: {BLUE}{balance.mpesa_balance}{RESET}")
                 else:
                     print(f"{RED}Recipient not found.{RESET}")
             else:
-                print(f"Insufficient MPesa balance. Your current balance is {BLUE}{balance.mpesa_balance}{RESET}")
+                print(f"{RED}Insufficient MPesa balance. Your current balance is {BLUE}{balance.mpesa_balance}{RESET}")
 
         # Generate Transactions pdf
         elif choice == '6':
             generate_pdf_report(user.id)
 
-        # Logout
+        # Logout  
         elif choice == '7':
             log_activity(user.id, "logged out")
-            print("Logging out...")
-            break
-        
+            print(f"{GREEN}You have been logged out successfully.{RESET}")
+            return
+
         # Back Home
         elif choice == '8':
-            display_home(user, balance)
+            display_home(user, balance)  # Go back to main menu
 
-        # Viewing Activity Logs
-        elif choice == '9' and user.phone_number == "0756668183":  # Admin check
+        # View Activity Logs
+        elif choice == '9' and user.phone_number == "0756668183":
             view_activity_logs()
 
         else:
-            print("Invalid choice. Please try again.")
+            print(f"{RED}Invalid option. Please try again.{RESET}")
 
-# Function to handle registration and login
+# Function to handle registration , login & Exit
 def main():
     welcome_message()
+    
     while True:
-        choice = input("1. Login\n2. Register\n3. Exit\nChoose an option: ")
+        print("\nMain Menu:")
+        for option in main_menu_options:
+            print(f"{option[0]}. {BOLD}{option[1]}{RESET}")
+
+        choice = input("\nChoose Option: ")
+        
         if choice == '1':
             user, balance = login()
-            if user and balance:
+            if user:
                 main_menu(user, balance)
+        
         elif choice == '2':
-            register()
+            user, balance = register()
+            if user:
+                main_menu(user, balance)
+        
         elif choice == '3':
-            print("Exiting the application.")
+            print(f"Thank you for using Mobile Services! {GREEN}Goodbye.{RESET}")
             break
+
         else:
             print(f"{RED}Invalid option. Please try again.{RESET}")
 
 if __name__ == "__main__":
-    Base.metadata.create_all(engine)
     main()
