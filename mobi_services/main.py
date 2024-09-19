@@ -166,6 +166,7 @@ def main_menu(user, balance):
     while True:
         choice = input("Choose an option: ")
 
+        # Buy Airtime
         if choice == '1':
             amount = float(input("Enter amount to buy airtime: "))
             if balance.mpesa_balance >= amount:
@@ -178,6 +179,7 @@ def main_menu(user, balance):
             else:
                 print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
 
+        # Transfer Airtime
         elif choice == '2':
             amount = float(input("Enter amount to transfer airtime: "))
             if balance.airtime_balance >= amount:
@@ -197,6 +199,7 @@ def main_menu(user, balance):
             else:
                 print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
 
+        # Buy Bundles
         elif choice == '3':
             amount = float(input("Enter amount to buy bundles: "))
             payment_method = input("Choose payment method:\n1. MPesa\n2. Credit\nEnter 1 for MPesa or 2 for Credit: ")
@@ -224,6 +227,7 @@ def main_menu(user, balance):
             else:
                 print("Invalid payment method.")
 
+        # Transfer Bundles
         elif choice == '4':
             amount = float(input("Enter amount to transfer bundles: "))
             if int(balance.bundles_balance[:-2]) >= amount:
@@ -242,6 +246,7 @@ def main_menu(user, balance):
             else:
                 print("Insufficient bundles balance.")
 
+        # Send Money
         elif choice == '5':
             amount = float(input("Enter amount to send: "))
             if balance.mpesa_balance >= amount:
@@ -259,17 +264,22 @@ def main_menu(user, balance):
                     print("Recipient not found.")
             else:
                 print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
+
+        # Generate Transactions pdf
         elif choice == '6':
             generate_pdf_report(user.id)
 
+        # Logout
         elif choice == '7':
             log_activity(user.id, "logged out")
             print("Logging out...")
             break
-
+        
+        # Back Home
         elif choice == '8':
             display_home(user, balance)
 
+        # Viewing Activity Logs
         elif choice == '9' and user.phone_number == "0756668183":  # Admin check
             view_activity_logs()
 
