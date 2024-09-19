@@ -212,7 +212,15 @@ def main_menu(user, balance):
                 else:
                     print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
             elif payment_method == '2':
-                print("Credit payment method not implemented yet.")
+                if balance.airtime_balance >= amount:
+                    current_bundles = float(balance.bundles_balance.replace("MB", ""))
+                    balance.bundles_balance = f"{int(current_bundles + amount)}MB"
+                    balance.airtime_balance -= amount
+                    session.commit()
+                    record_transaction(user.id, 'Buy Bundles', amount, method='airtime', sender=user.username)
+                    print(f"Bundles purchased with Credit. New balance: {balance.bundles_balance}")
+                else:
+                    print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
             else:
                 print("Invalid payment method.")
 
