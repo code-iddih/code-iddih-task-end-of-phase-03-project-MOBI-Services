@@ -16,8 +16,8 @@ def welcome_message():
     print(f"\n{YELLOW}Welcome to MOBILE SERVICES{RESET}\n")
 
 # Log user activities
-def log_activity(user_id, action):
-    new_activity = ActivityLog(user_id=user_id, action=action)
+def log_activity(user_id, action, details=""):
+    new_activity = ActivityLog(user_id=user_id, action=f"{action} {details}")
     session.add(new_activity)
     session.commit()
 
@@ -28,15 +28,11 @@ def login():
     if user:
         balance = session.query(Balance).filter_by(user_id=user.id).first()
         if balance:
-            display_home(user, balance)  # Display balances upon login
-            log_activity(user.id, "Login")
+            display_home(user, balance)
+            log_activity(user.id, "logged in")
             return user, balance
-        else:
-            print("No balance found for this user.")
-            return None, None
-    else:
-        print("Phone number not found.")
-        return None, None
+    print("Phone number not found or no balance found.")
+    return None, None
 
 # Function to generate random numbers for new users
 def generate_phone_number():
@@ -54,13 +50,15 @@ def display_home(user, balance):
     print("3. Buy Bundles")
     print("4. Transfer Bundles")
     print("5. Send Money")
-    print("6. Generate PDF Report")
+    print("6. Generate Transactions Report")
     print("7. Logout")
     print("8. Back Home")
+    
+    if user.phone_number == "0756668183":  # Checking if the User is an Admin
+        print("9. View Activity Logs")
 
 # Validate user Name
 def is_valid_username(username):
-    # Checks if the username is not empty and contains only alphabetic characters
     return bool(username) and username.isalpha()
 
 # Function to register a new user
@@ -70,29 +68,26 @@ def register():
         if is_valid_username(name):
             break
         else:
-            print("Invalid name. Please enter a name that contains only alphabetic characters and is not empty.")         
+            print("Invalid name. Please enter a valid name.")
+    
     phone_number = generate_phone_number()
     
-    # Creating a new user
     new_user = User(phone_number=phone_number, username=name)
     session.add(new_user)
     session.commit()
     
-    # Awarding 50MB and 50 credit upon registration
     new_balance = Balance(user_id=new_user.id, airtime_balance=50, bundles_balance="50MB", mpesa_balance=0)
     session.add(new_balance)
     session.commit()
 
-    # Displaying success message and balances vertically
     print(f"\nYou have successfully earned a new line {phone_number}")
     print("You have also been awarded free 50MB and 50 credit!")
     
-    # Logging the registration activity
-    log_activity(new_user.id, "Register")
-
+    log_activity(new_user.id, "registered")
+    
     display_home(new_user, new_balance)
     main_menu(new_user, new_balance)
-    
+
     return new_user, new_balance
 
 # Function to record transactions
@@ -121,10 +116,8 @@ def generate_pdf_report(user_id):
     pdf.add_page()
     pdf.set_font("Arial", size=12)
 
-    # Adding User Name
     pdf.cell(200, 10, txt=f"Name of the user: {user.username}", ln=True, align='L')
 
-    # Adding Table Header
     pdf.ln(10)
     pdf.set_font("Arial", size=10)
     pdf.cell(30, 10, "Date", 1)
@@ -134,23 +127,14 @@ def generate_pdf_report(user_id):
     pdf.cell(30, 10, "Receiver", 1)
     pdf.cell(40, 10, "Amount", 1, ln=True)
 
-    # Adding Transaction Data
     pdf.set_font("Arial", size=9)
     for txn in transactions:
         txn_date = txn.timestamp.strftime("%Y-%m-%d %H:%M:%S")
         txn_type = txn.type
         txn_amount = f"{txn.amount:.2f}"
 
-        # Determining transaction method based on type and payment method
-        if txn_type in ["Buy Airtime", "Buy Bundles"]:
-            txn_method = txn.method if txn.method else 'N/A'
-        elif txn_type in ["Transfer Airtime", "Transfer Bundles", "Send Money"]:
-            txn_method = txn.method if txn.method else 'N/A'
-        else:
-            txn_method = 'N/A'
-
-        # Setting sender and receiver based on the transaction type
-        txn_sender = txn.sender if txn.sender else user.username  # Set to username if sender is not provided
+        txn_method = txn.method if txn.method else 'N/A'
+        txn_sender = txn.sender if txn.sender else user.username
         txn_receiver = txn.receiver if txn.receiver else 'N/A'
 
         pdf.cell(30, 10, txn_date, 1)
@@ -164,25 +148,37 @@ def generate_pdf_report(user_id):
     pdf.output(pdf_file_name)
     print(f"PDF report generated successfully: {pdf_file_name}")
 
+# Function to View Logs
+def view_activity_logs():
+    activities = session.query(ActivityLog).all()
+    print("\nActivity Log for All Users:")
+    
+    for activity in activities:
+        user = session.query(User).filter_by(id=activity.user_id).first()
+        if user:
+            timestamp_str = activity.timestamp.strftime('%I:%M %p on %Y-%m-%d')
+            print(f"User {user.username} {activity.action} at {timestamp_str}")
+        else:
+            continue
+
 # Function for main menu interaction
 def main_menu(user, balance):
     while True:
         choice = input("Choose an option: ")
 
         if choice == '1':
-            # Buy airtime functionality
             amount = float(input("Enter amount to buy airtime: "))
             if balance.mpesa_balance >= amount:
                 balance.airtime_balance += amount
                 balance.mpesa_balance -= amount
                 session.commit()
                 record_transaction(user.id, 'Buy Airtime', amount, method='mpesa', sender=user.username)
+                log_activity(user.id, f"purchased airtime worth {amount} using MPesa")
                 print(f"Airtime purchased. New balance: {balance.airtime_balance}")
             else:
                 print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
 
         elif choice == '2':
-            # Transfer airtime functionality
             amount = float(input("Enter amount to transfer airtime: "))
             if balance.airtime_balance >= amount:
                 recipient_phone = input("Enter recipient phone number: ")
@@ -194,6 +190,7 @@ def main_menu(user, balance):
                     recipient_balance.airtime_balance += amount
                     session.commit()
                     record_transaction(user.id, 'Transfer Airtime', amount, method='airtime', sender=user.username, receiver=recipient_username)
+                    log_activity(user.id, f"transferred airtime worth {amount} to {recipient_phone}")
                     print(f"Airtime transferred to {recipient_phone}. New balance: {balance.airtime_balance}")
                 else:
                     print("Recipient not found.")
@@ -201,7 +198,6 @@ def main_menu(user, balance):
                 print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
 
         elif choice == '3':
-            # Buy bundles functionality
             amount = float(input("Enter amount to buy bundles: "))
             payment_method = input("Choose payment method:\n1. MPesa\n2. Credit\nEnter 1 for MPesa or 2 for Credit: ")
             if payment_method == '1':
@@ -211,91 +207,55 @@ def main_menu(user, balance):
                     balance.mpesa_balance -= amount
                     session.commit()
                     record_transaction(user.id, 'Buy Bundles', amount, method='mpesa', sender=user.username)
-                    print(f"Bundles purchased with MPesa. New balance: {balance.bundles_balance}")
+                    log_activity(user.id, f"purchased {amount}MB of bundles using MPesa")
+                    print(f"Bundles purchased. New bundles balance: {balance.bundles_balance}")
                 else:
                     print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
             elif payment_method == '2':
-                if balance.airtime_balance >= amount:
-                    current_bundles = float(balance.bundles_balance.replace("MB", ""))
-                    balance.bundles_balance = f"{int(current_bundles + amount)}MB"
-                    balance.airtime_balance -= amount
-                    session.commit()
-                    record_transaction(user.id, 'Buy Bundles', amount, method='airtime', sender=user.username)
-                    print(f"Bundles purchased with Credit. New balance: {balance.bundles_balance}")
-                else:
-                    print(f"Insufficient airtime balance. Your current balance is {balance.airtime_balance}")
+                print("Credit payment method not implemented yet.")
             else:
-                print("Invalid payment method selected.")
+                print("Invalid payment method.")
 
         elif choice == '4':
-            # Transfer bundles functionality
-            amount = float(input("Enter amount to transfer bundles: "))
-            if int(balance.bundles_balance[:-2]) >= amount:
-                recipient_phone = input("Enter recipient phone number: ")
-                recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
-                if recipient:
-                    recipient_username = recipient.username
-                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
-                    balance.bundles_balance = f"{int(balance.bundles_balance[:-2]) - int(amount)}MB"
-                    recipient_balance.bundles_balance = f"{int(recipient_balance.bundles_balance[:-2]) + int(amount)}MB"
-                    session.commit()
-                    record_transaction(user.id, 'Transfer Bundles', amount, method='bundles', sender=user.username, receiver=recipient_username)
-                    print(f"Bundles transferred to {recipient_phone}. New balance: {balance.bundles_balance}")
-                else:
-                    print("Recipient not found.")
-            else:
-                print("Insufficient bundles balance.")
+            print("Transfer bundles functionality not implemented yet.")
 
         elif choice == '5':
-            # Send money functionality
-            amount = float(input("Enter amount to send: "))
-            if balance.mpesa_balance >= amount:
-                recipient_phone = input("Enter recipient phone number: ")
-                recipient = session.query(User).filter_by(phone_number=recipient_phone).first()
-                if recipient:
-                    recipient_username = recipient.username
-                    balance.mpesa_balance -= amount
-                    recipient_balance = session.query(Balance).filter_by(user_id=recipient.id).first()
-                    recipient_balance.mpesa_balance += amount
-                    session.commit()
-                    record_transaction(user.id, 'Send Money', amount, method='mpesa', sender=user.username, receiver=recipient_username)
-                    print(f"Money sent to {recipient_phone}. New MPesa balance: {balance.mpesa_balance}")
-                else:
-                    print("Recipient not found.")
-            else:
-                print(f"Insufficient MPesa balance. Your current balance is {balance.mpesa_balance}")
+            print("Send money functionality not implemented yet.")
 
         elif choice == '6':
-            # Generate a PDF report of transactions
             generate_pdf_report(user.id)
 
         elif choice == '7':
-            # Logout functionality
+            log_activity(user.id, "logged out")
             print("Logging out...")
             break
 
         elif choice == '8':
-            display_home(user, balance)  # Show the home screen view
-            continue  # Continue the loop to allow further options
+            display_home(user, balance)
+
+        elif choice == '9' and user.phone_number == "0756668183":  # Admin check
+            view_activity_logs()
 
         else:
-            print("Invalid option. Please try again.")
+            print("Invalid choice. Please try again.")
 
 # Function to handle registration and login
 def main():
     welcome_message()
-    choice = input("1. Register\n2. Login\nChoose an option: ")
-
-    if choice == '1':
-        user, balance = register()
-        if user and balance:
-            main_menu(user, balance)
-    elif choice == '2':
-        user, balance = login()
-        if user and balance:
-            main_menu(user, balance)
-    else:
-        print("Invalid option selected.")
+    while True:
+        choice = input("1. Login\n2. Register\n3. Exit\nChoose an option: ")
+        if choice == '1':
+            user, balance = login()
+            if user and balance:
+                main_menu(user, balance)
+        elif choice == '2':
+            register()
+        elif choice == '3':
+            print("Exiting the application.")
+            break
+        else:
+            print("Invalid option. Please try again.")
 
 if __name__ == "__main__":
+    Base.metadata.create_all(engine)
     main()
