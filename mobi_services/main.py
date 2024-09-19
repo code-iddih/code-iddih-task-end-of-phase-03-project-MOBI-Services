@@ -111,8 +111,6 @@ def register():
     display_home(new_user, new_balance)
     main_menu(new_user, new_balance)
 
-    return new_user, new_balance
-
 # Function to record transactions
 def record_transaction(user_id, transaction_type, amount, method=None, sender=None, receiver=None):
     new_transaction = Transaction(
@@ -310,7 +308,7 @@ def main_menu(user, balance):
         elif choice == '7':
             log_activity(user.id, "logged out")
             print(f"{GREEN}You have been logged out successfully.{RESET}")
-            return
+            break
 
         # Back Home
         elif choice == '8':
@@ -340,9 +338,7 @@ def main():
                 main_menu(user, balance)
         
         elif choice == '2':
-            user, balance = register()
-            if user:
-                main_menu(user, balance)
+            register()
         
         elif choice == '3':
             print(f"Thank you for using Mobile Services! {GREEN}Goodbye.{RESET}")
