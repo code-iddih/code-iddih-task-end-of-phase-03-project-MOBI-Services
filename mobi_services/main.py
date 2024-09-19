@@ -178,7 +178,7 @@ def view_activity_logs():
         user = session.query(User).filter_by(id=activity.user_id).first()
         if user:
             timestamp_str = activity.timestamp.strftime('%I:%M %p on %Y-%m-%d')
-            print(f"User {user.username} {activity.action} at {timestamp_str}")
+            print(f"User {BLUE}{user.username}{RESET} {BLUE}{activity.action}{RESET} at {GREEN}{timestamp_str}{GREEN}")
 
 # Function for main menu interaction
 def main_menu(user, balance):
