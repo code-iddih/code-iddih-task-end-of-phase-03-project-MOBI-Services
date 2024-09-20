@@ -18,7 +18,7 @@ admin_menu_options = (
     ('3', "Buy Bundles"),
     ('4', "Transfer Bundles"),
     ('5', "Send Money"),
-    ('6', "Generate Transactions PDF"),
+    ('6', "Generate Transactions Report"),
     ('7', "Logout"),
     ('8', "Back Home"),
     ('9', "View Activity Logs")  # For Admins only
@@ -31,7 +31,7 @@ user_menu_options = (
     ('3', "Buy Bundles"),
     ('4', "Transfer Bundles"),
     ('5', "Send Money"),
-    ('6', "Generate Transactions PDF"),
+    ('6', "Generate Transactions Report"),
     ('7', "Logout"),
     ('8', "Back Home"),
 )
@@ -167,7 +167,7 @@ def generate_pdf_report(user_id):
 
     pdf_file_name = f"transaction_report_{user_id}.pdf"
     pdf.output(pdf_file_name)
-    print(f"{GREEN}PDF report generated successfully: {pdf_file_name}{RESET}")
+    print(f"{GREEN}Transactions report generated successfully: {pdf_file_name}{RESET}")
 
 # Function to View Logs
 def view_activity_logs():
