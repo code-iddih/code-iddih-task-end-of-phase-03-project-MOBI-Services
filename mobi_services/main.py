@@ -167,7 +167,7 @@ def generate_pdf_report(user_id):
 
     pdf_file_name = f"transaction_report_{user_id}.pdf"
     pdf.output(pdf_file_name)
-    print(f"PDF report generated successfully: {pdf_file_name}")
+    print(f"{GREEN}PDF report generated successfully: {pdf_file_name}{RESET}")
 
 # Function to View Logs
 def view_activity_logs():
