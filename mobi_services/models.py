@@ -9,6 +9,7 @@ DATABASE_URL = "sqlite:///mobi_services.db"
 
 engine = create_engine('sqlite:///mobi_services.db')
 
+# User Model
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -18,16 +19,17 @@ class User(Base):
     activities = relationship("ActivityLog", back_populates="user")
     transactions = relationship("Transaction", back_populates="user")
 
+# Balance Model
 class Balance(Base):
     __tablename__ = 'balances'
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     airtime_balance = Column(Float, default=0.0)
-    bundles_balance = Column(String, default="0MB")  # New bundles balance column
+    bundles_balance = Column(String, default="0MB")  
     mpesa_balance = Column(Float, default=0.0)
     user = relationship("User", back_populates="balance")
 
-
+# Transaction Model
 class Transaction(Base):
     __tablename__ = 'transactions'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -40,6 +42,7 @@ class Transaction(Base):
     receiver = Column(String, nullable=True) 
     user = relationship("User", back_populates="transactions")
 
+# ActivityLog Model
 class ActivityLog(Base):
     __tablename__ = 'activity_logs'
     id = Column(Integer, primary_key=True, autoincrement=True)
