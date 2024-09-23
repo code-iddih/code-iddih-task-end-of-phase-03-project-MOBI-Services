@@ -127,6 +127,37 @@ The **schema** currently looks like this:
 ### Admin action
 
 **View Activity Logs:** Admin users can view all user activity logs.
+
+## Project Structure
+
+TASK-END-OF-PHASE-03-PROJECT/\
+├── mobi_services/\
+│   ├── migrations/\
+│   │   └── versions/\
+│   │       ├── 2ebecb2f1b28_initial_migration.py\
+│   │       ├── 9f3cb5ff4c07_adds_the_transactions_table.py\
+│   │       ├── 39dc47166dc_adds_the_activity_log_table.py\
+│   │       ├── 3331ef8a5cf2_adds_the_balances_table.py\
+│   │       ├── afb76d1ae3da_add_method_sender_and_receiver_columns.py\
+│   │       └── b901834575f1_change_phone_format_and_bundle_balance.py\
+│   ├── env.py\
+│   ├── README\
+│   ├── script.py.mako\
+│   ├── alembic.ini\
+│   ├── colors.py\
+│   ├── main.py\
+│   ├── mobi_services.db\
+│   ├── models.py\
+│   ├── seed.py\
+├── Pipfile\
+├── Pipfile.lock\
+├── README.md\
+├── transaction_report_1.pdf\
+├── transaction_report_2.pdf\
+├── transaction_report_6.pdf\
+├── transaction_report_7.pdf\
+└── transaction_report_10.pdf
+
  
 
 ## Setup Instructions
